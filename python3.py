@@ -1,4 +1,127 @@
-first = "mikhil"
-last = "sri sai"
-full = F"{first}{last}"
-print(full)
+import turtle
+import random
+import time
+screen = turtle.Screen()
+screen.bgcolor("lightblue")
+
+
+player_one = turtle.Turtle()
+player_one.color("red")
+player_one.shape("turtle")
+
+player_two = turtle.Turtle()
+player_two.color("blue")
+player_two.shape("turtle")
+
+#position of the  players
+player_one.penup()
+player_one.goto(-300, 200)
+player_two.penup()
+player_two.goto(-300, -200)
+
+#lets draw the finish line
+player_one.goto(300, -250)
+player_one.left(90)
+player_one.pendown()
+player_one.pensize(5)
+player_two.pensize(5)
+player_one.color("black")
+player_one.fd(500)
+player_one.write("finish", font= "24", align= "right" )
+
+player_one.penup()
+player_one.color("red")
+player_one.goto(-300, 200)
+player_one.right(90)
+
+player_one.pendown()
+player_two.pendown()
+
+dice_turtle = turtle.Turtle()
+dice_turtle.hideturtle()
+dice_turtle.penup()
+dice_turtle.goto(0,-50)
+
+#values for die
+die = [1, 2, 3, 4, 5, 6]
+
+def darw_dice(number):
+    dice_turtle.clear()
+    dice_turtle.pendown()
+    dice_turtle.pensize(3)
+    dice_turtle.setheading(0)
+    for _ in range(4):
+        dice_turtle.fd(100)
+        dice_turtle.left(90)
+    dice_turtle.penup()
+
+    spots = {
+        1: [(50, 50)],
+        2: [(30, 70), (70, 30)],
+        3: [(30, 70), (50, 50), (70, 30)],
+        4: [(30, 70), (70,70), (30,30), (70,30)],
+        5: [(30, 70), (70, 70), (50, 50), (30, 30), (70,30)],
+        6: [(30,70), (70, 70), (30, 50), (70, 50), (30, 30), (70, 30)]
+    }
+    for (x,y) in spots[number]:
+        dice_turtle.goto(x, y)
+        dice_turtle.dot(20, "black")
+
+
+#lets create the game
+
+def roll_player_one():
+    roll = random.choice(die)
+    player_one.fd(20 * roll)
+    print(f"player one rolled {roll}")
+    check_winner()
+
+def roll_player_two():
+    roll = random.choice(die)
+    player_two.fd(20 * roll)
+    print(f"player two rolled {roll}")
+    check_winner()
+
+def check_winner():
+    if player_one.xcor() >=300:
+        print(f"player one wins")
+        screen.bye()
+    elif player_two.xcor() >=300:
+        print(f"player two wins")
+        screen.bye()
+
+button_drawer = turtle.Turtle()
+button_drawer.hideturtle()
+button_drawer.penup()
+
+
+
+def draw_button(x, y, text):
+    button_drawer.goto(x, y)
+    button_drawer.fillcolor("lightgrey")  # Set fill color before drawing
+    button_drawer.pendown()
+    button_drawer.begin_fill()
+    for _ in range(2):
+        button_drawer.fd(120)
+        button_drawer.right(90)
+        button_drawer.fd(50)
+        button_drawer.right(90)
+    button_drawer.end_fill()
+    button_drawer.penup()
+    button_drawer.goto(x + 60, y - 25)  # Move up a bit for better visibility
+    button_drawer.write(text, align="center", font=("arial", 14, "bold"))
+
+draw_button(-200, -100, "roll p1")
+draw_button(100, -100, "roll p2")    
+
+def click_handle(x, y):
+    if -200 <= x <= -80 and -150 <= y <= -100:
+        roll_player_one()
+    elif 100 <= x <= 220 and -150 <= y <= -100:
+        roll_player_two()
+
+screen.onclick(click_handle)        
+        
+    
+screen.mainloop()
+
